@@ -22,6 +22,11 @@ export default function Page() {
           Send
         </button>
       </div>
+      <div>
+        {messages.map((e) => (
+          <li>{e}</li>
+        ))}
+      </div>
     </div>
   );
 }

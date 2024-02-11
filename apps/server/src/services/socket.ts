@@ -26,11 +26,13 @@ class SocketService {
         origin: "*",
       },
     });
+    sub.subscribe("MESSAGES");
   }
 
   public initListeners() {
     const io = this.io;
     console.log("Init Socket Listeners...");
+
     io.on("connect", (socket) => {
       console.log(`New Socket Connected`, socket.id);
 
@@ -38,6 +40,13 @@ class SocketService {
         console.log("New Message Rec.", message);
         await pub.publish("MESSAGES", JSON.stringify({ message }));
       });
+    });
+
+    sub.on("message", (channel, message) => {
+      if (channel === "MESSAGES") {
+        console.log("New Msg From Redis", message);
+        io.emit("message", message);
+      }
     });
   }
 
